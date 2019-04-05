@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve -o",
     "build": "ng build",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "postinstall": "ng build --aot --prod"
   },
   "private": true,
   "dependencies": {
