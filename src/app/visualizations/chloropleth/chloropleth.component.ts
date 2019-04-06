@@ -15,7 +15,6 @@ enum MapType {
   styleUrls: ["./chloropleth.component.css"]
 })
 export class ChloroplethComponent implements OnInit {
-
   private width = 960;
   private height = 700;
 
@@ -31,14 +30,14 @@ export class ChloroplethComponent implements OnInit {
   private dataStatesIncidents: any;
   private dataCountiesIncidents: any;
 
-  private minimum: number;
-  private maximum: number;
+  minimum: number;
+  maximum: number;
   private tooltip: any;
 
   private DEFAULT_YEAR = "2014";
-  private years = ["2014", "2015", "2016", "2017"]
+  private years = ["2014", "2015", "2016", "2017"];
   private currentYear: string;
-  private animationYear: string;
+  animationYear: string;
   private isAnimationRunning = false;
 
   async ngOnInit() {
@@ -54,15 +53,25 @@ export class ChloroplethComponent implements OnInit {
                 Incidents : <b> ${Math.round(data.total)} </b></div>`; // TODO à valider que c'est vrm cela
     });
     // load neccessary data
-    this.statesIdNames = await d3.json("./../../../../extract/id-formatting/states-id.json");
-    this.dataStatesIncidents = await d3.json("./../../../../extract/domain-color-max/domain_States.json");
-    this.countiesIdNames = await d3.json("./../../../../extract/id-formatting/counties-id.json");
-    this.dataCountiesIncidents = await d3.json("./../../../../extract/domain-color-max/domain_Counties.json");
-
+    this.statesIdNames = await d3.json(
+      "./../../../../extract/id-formatting/states-id.json"
+    );
+    this.dataStatesIncidents = await d3.json(
+      "./../../../../extract/domain-color-max/domain_States.json"
+    );
+    this.countiesIdNames = await d3.json(
+      "./../../../../extract/id-formatting/counties-id.json"
+    );
+    this.dataCountiesIncidents = await d3.json(
+      "./../../../../extract/domain-color-max/domain_Counties.json"
+    );
 
     this.currentYear = this.DEFAULT_YEAR;
     // counties
-    this.countiesMap = topoJson.feature(this.us, this.us.objects.counties).features;
+    this.countiesMap = topoJson.feature(
+      this.us,
+      this.us.objects.counties
+    ).features;
     this.updateJsonMapForCounties(this.currentYear);
     // states
     this.statesMap = topoJson.feature(this.us, this.us.objects.states).features;
@@ -79,7 +88,8 @@ export class ChloroplethComponent implements OnInit {
   }
 
   private buildMap(tooltip: any, mapType: MapType) {
-    const mapTypeData = mapType === MapType.State ? this.statesMap : this.countiesMap;
+    const mapTypeData =
+      mapType === MapType.State ? this.statesMap : this.countiesMap;
     this.resetMapSVG();
     this.svg
       .selectAll("path")
@@ -87,20 +97,27 @@ export class ChloroplethComponent implements OnInit {
       .enter()
       .append("path")
       .attr("d", this.path)
-      .style("fill", function (d) {
+      .style("fill", function(d) {
         return d3.interpolatePuBu(d.properties.value);
       })
-      .on("mouseover", function (d, i) {
-        d3.select("#map").select("svg").selectAll("path").style("opacity", 0.1);
+      .on("mouseover", function(d, i) {
+        d3.select("#map")
+          .select("svg")
+          .selectAll("path")
+          .style("opacity", 0.1);
         d3.select(this).style("opacity", 1);
       })
-      .on("mousemove", function (d) {
-        tooltip.show(d.properties, mapType, this)
-          .style("left", (d3.event.pageX - 65) + "px")
-          .style("top", (d3.event.pageY - 77) + "px");
+      .on("mousemove", function(d) {
+        tooltip
+          .show(d.properties, mapType, this)
+          .style("left", d3.event.pageX - 65 + "px")
+          .style("top", d3.event.pageY - 77 + "px");
       })
-      .on("mouseout", function (d) {
-        d3.select("#map").select("svg").selectAll("path").style("opacity", 1);
+      .on("mouseout", function(d) {
+        d3.select("#map")
+          .select("svg")
+          .selectAll("path")
+          .style("opacity", 1);
         tooltip.hide(d);
       });
     this.svg.call(tooltip);
@@ -119,8 +136,7 @@ export class ChloroplethComponent implements OnInit {
   }
 
   public changeYear(year: string, isAnimation: boolean) {
-    if (!isAnimation)
-      this.currentYear = year;
+    if (!isAnimation) this.currentYear = year;
     if (this.type === MapType.State) {
       this.updateJsonMapForStates(year);
       this.buildMap(this.tooltip, this.type);
@@ -133,7 +149,10 @@ export class ChloroplethComponent implements OnInit {
   private updateJsonMapForStates(year: string) {
     this.statesMap.forEach((state: any) => {
       const stateName = this.statesIdNames[state.id];
-      const ratio = stateName in this.dataStatesIncidents[year] ? this.dataStatesIncidents[year][stateName] : 0;
+      const ratio =
+        stateName in this.dataStatesIncidents[year]
+          ? this.dataStatesIncidents[year][stateName]
+          : 0;
       const total = this.dataStatesIncidents[year]["maximum"] * ratio;
       this.maximum = this.dataStatesIncidents[year]["maximum"];
       this.minimum = this.dataStatesIncidents[year]["minimum"];
@@ -150,7 +169,10 @@ export class ChloroplethComponent implements OnInit {
   private updateJsonMapForCounties(year: string) {
     this.countiesMap.forEach((county: any) => {
       const countyName = this.countiesIdNames[county.id];
-      const ratio = countyName in this.dataCountiesIncidents[year] ? this.dataCountiesIncidents[year][countyName] : 0;
+      const ratio =
+        countyName in this.dataCountiesIncidents[year]
+          ? this.dataCountiesIncidents[year][countyName]
+          : 0;
       const total = this.dataCountiesIncidents[year]["maximum"] * ratio;
       this.maximum = this.dataCountiesIncidents[year]["maximum"];
       this.minimum = this.dataCountiesIncidents[year]["minimum"];
@@ -183,12 +205,14 @@ export class ChloroplethComponent implements OnInit {
   }
 
   private buildLegend(): void {
-    const key = d3.select("#legend1")
+    const key = d3
+      .select("#legend1")
       .append("svg")
       .attr("width", 25)
       .attr("height", 500);
 
-    var legend = key.append("defs")
+    var legend = key
+      .append("defs")
       .append("svg:linearGradient")
       .attr("id", "gradient")
       .attr("x1", "100%")
@@ -197,22 +221,26 @@ export class ChloroplethComponent implements OnInit {
       .attr("y2", "0%")
       .attr("spreadMethod", "pad");
 
-    legend.append("stop")
+    legend
+      .append("stop")
       .attr("offset", "0%")
       .attr("stop-color", "#FFF7FB")
       .attr("stop-opacity", 1);
 
-    legend.append("stop")
+    legend
+      .append("stop")
       .attr("offset", "75%")
       .attr("stop-color", "#1e6cb0")
       .attr("stop-opacity", 1);
 
-    legend.append("stop")
+    legend
+      .append("stop")
       .attr("offset", "100%")
       .attr("stop-color", "#023858")
       .attr("stop-opacity", 1);
 
-    key.append("rect")
+    key
+      .append("rect")
       .attr("width", 25)
       .attr("height", 530 - 30)
       .style("fill", "url(#gradient)")
