@@ -3,6 +3,10 @@ import * as d3 from "d3";
 import * as topoJson from "topojson";
 import { DataMap } from "src/app/interfaces/DataMap";
 import d3Tip from "d3-tip";
+import { domain_counties } from "./domain_Counties";
+import { states_id } from "./states-id";
+import { counties_id } from "./counties-id";
+import { domain_states } from "./domain_States";
 
 enum MapType {
   State,
@@ -54,10 +58,10 @@ export class ChloroplethComponent implements OnInit {
                 Incidents : <b> ${Math.round(data.total)} </b></div>`; // TODO à valider que c'est vrm cela
     });
     // load neccessary data
-    this.statesIdNames = await d3.json("./../../../../extract/id-formatting/states-id.json");
-    this.dataStatesIncidents = await d3.json("./../../../../extract/domain-color-max/domain_States.json");
-    this.countiesIdNames = await d3.json("./../../../../extract/id-formatting/counties-id.json");
-    this.dataCountiesIncidents = await d3.json("./../../../../extract/domain-color-max/domain_Counties.json");
+    this.statesIdNames = states_id;
+    this.dataStatesIncidents = domain_states;
+    this.countiesIdNames = counties_id;
+    this.dataCountiesIncidents = domain_counties;
 
 
     this.currentYear = this.DEFAULT_YEAR;
