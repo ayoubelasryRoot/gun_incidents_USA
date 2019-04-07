@@ -31,14 +31,14 @@ export class ChloroplethComponent implements OnInit {
   private dataStatesIncidents: any;
   private dataCountiesIncidents: any;
 
-  private minimum: number;
-  private maximum: number;
+  minimum: number;
+  maximum: number;
   private tooltip: any;
 
   private DEFAULT_YEAR = "2014";
   private years = ["2014", "2015", "2016", "2017"]
   private currentYear: string;
-  private animationYear: string;
+  animationYear: string;
   private isAnimationRunning = false;
 
   async ngOnInit() {
