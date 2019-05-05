@@ -2,11 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import * as d3 from "d3";
 import * as topoJson from "topojson";
 import { DataMap } from "src/app/interfaces/DataMap";
-import d3Tip from "d3-tip";
+
 import { domain_counties } from "./domain_Counties";
 import { states_id } from "./states-id";
 import { counties_id } from "./counties-id";
 import { domain_states } from "./domain_States";
+
+import d3Tip from "d3-tip";
 
 enum MapType {
   State,
@@ -35,14 +37,13 @@ export class ChloroplethComponent implements OnInit {
   private dataStatesIncidents: any;
   private dataCountiesIncidents: any;
 
-  minimum: number;
-  maximum: number;
+  private minimum: number;
+  private maximum: number;
   private tooltip: any;
 
   private DEFAULT_YEAR = "2014";
-  private years = ["2014", "2015", "2016", "2017"]
+  private years = ["2014", "2015", "2016", "2017"];
   private currentYear: string;
-  animationYear: string;
   private isAnimationRunning = false;
 
   async ngOnInit() {
@@ -55,14 +56,13 @@ export class ChloroplethComponent implements OnInit {
     this.tooltip.html((data: DataMap, type: MapType) => {
       const typeText = type === MapType.State ? "État" : "Comté";
       return `<div>${typeText} : <b> ${data.name} </b> <br>
-                Incidents : <b> ${Math.round(data.total)} </b></div>`; // TODO à valider que c'est vrm cela
+                Incidents : <b> ${Math.round(data.total)} </b></div>`;
     });
     // load neccessary data
     this.statesIdNames = states_id;
     this.dataStatesIncidents = domain_states;
     this.countiesIdNames = counties_id;
     this.dataCountiesIncidents = domain_counties;
-
 
     this.currentYear = this.DEFAULT_YEAR;
     // counties
@@ -122,9 +122,9 @@ export class ChloroplethComponent implements OnInit {
       .attr("height", this.height);
   }
 
-  public changeYear(year: string, isAnimation: boolean) {
-    if (!isAnimation)
-      this.currentYear = year;
+  public changeYear(year: string) {
+    this.currentYear = year;
+
     if (this.type === MapType.State) {
       this.updateJsonMapForStates(year);
       this.buildMap(this.tooltip, this.type);
@@ -170,14 +170,13 @@ export class ChloroplethComponent implements OnInit {
 
   async animate() {
     if (!this.isAnimationRunning) {
+      const yearSelectedBeforeAnimation = this.currentYear;
       this.isAnimationRunning = true;
       for (let i = 0; i < this.years.length; i++) {
-        this.animationYear = this.years[i];
+        this.changeYear(this.years[i]);
         await this.delay(700);
-        this.changeYear(this.animationYear, true);
       }
-      this.animationYear = "";
-      this.changeYear(this.currentYear, false);
+      this.changeYear(yearSelectedBeforeAnimation);
       this.isAnimationRunning = false;
     }
   }
@@ -192,7 +191,7 @@ export class ChloroplethComponent implements OnInit {
       .attr("width", 25)
       .attr("height", 500);
 
-    var legend = key.append("defs")
+    const legend = key.append("defs")
       .append("svg:linearGradient")
       .attr("id", "gradient")
       .attr("x1", "100%")
