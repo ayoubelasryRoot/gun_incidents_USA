@@ -9,6 +9,5 @@
 
 # Demo
 The website is hosted by heroky : <a href="https://usagunincidents.herokuapp.com">Web site link</a>
----
 ![models and prices](images/website.png)
 
