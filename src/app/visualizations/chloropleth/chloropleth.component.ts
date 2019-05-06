@@ -28,18 +28,18 @@ export class ChloroplethComponent implements OnInit {
   private us: any;
   private svg: any;
   private path: d3.GeoPath<any, d3.GeoPermissibleObjects>;
-  private statesMap: any;
-  private countiesMap: any;
-  private type: MapType;
+  statesMap: any;
+  countiesMap: any;
+  type: MapType;
 
   private statesIdNames: any;
   private countiesIdNames: any;
   private dataStatesIncidents: any;
   private dataCountiesIncidents: any;
 
-  private minimum: number;
-  private maximum: number;
-  private tooltip: any;
+  minimum: number;
+  maximum: number;
+  tooltip: any;
 
   DEFAULT_YEAR = "2014";
   years = ["2014", "2015", "2016", "2017"];
