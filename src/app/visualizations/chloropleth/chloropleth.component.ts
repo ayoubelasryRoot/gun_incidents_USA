@@ -41,10 +41,10 @@ export class ChloroplethComponent implements OnInit {
   private maximum: number;
   private tooltip: any;
 
-  private DEFAULT_YEAR = "2014";
-  private years = ["2014", "2015", "2016", "2017"];
-  private currentYear: string;
-  private isAnimationRunning = false;
+  DEFAULT_YEAR = "2014";
+  years = ["2014", "2015", "2016", "2017"];
+  currentYear: string;
+  isAnimationRunning = false;
 
   async ngOnInit() {
     // prepare usa map
